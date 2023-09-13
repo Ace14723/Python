@@ -3,9 +3,12 @@ FROM selenium/standalone-chrome
 # Set working directory
 WORKDIR /app
 
+# Install pip
+RUN apt-get update && apt-get install -y python3-pip
+
 # Copy the requirements.txt and install the Python dependencies
 COPY requirements.txt requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Copy the rest of your Flask app
 COPY . .
