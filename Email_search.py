@@ -6,6 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from flask_cors import CORS
 from flask import Flask, render_template
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import os
 
 app = Flask(__name__)
