@@ -19,12 +19,12 @@ def index():
 def search_email():
     email = request.json['email']
     
-    #setup Edge as the designated browser
-    options = webdriver.EdgeOptions()
-    options.use_chromium = True
-    driver = webdriver.Edge(options=options)
+    # Use Remote WebDriver to connect to the Selenium standalone container
+    driver = webdriver.Remote(
+        command_executor="http://localhost:4444/wd/hub",
+        desired_capabilities=DesiredCapabilities.CHROME
+    )
 
-    
     driver.get('https://pplsearch.amfam.com/pplsearch/')
     WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "optAttribute")))
 
@@ -68,10 +68,11 @@ def search_PID():
 
     producerID = request.json['producerID']
 
-    #setup Edge as the designated browser
-    options = webdriver.EdgeOptions()
-    options.use_chromium = True
-    driver = webdriver.Edge(options=options)
+    # Use Remote WebDriver to connect to the Selenium standalone container
+    driver = webdriver.Remote(
+        command_executor="http://localhost:4444/wd/hub",
+        desired_capabilities=DesiredCapabilities.CHROME
+    )
 
 
     driver.get('https://pplsearch.amfam.com/pplsearch/')
