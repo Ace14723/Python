@@ -6,6 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from flask_cors import CORS
 from flask import Flask, render_template
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import os
 
 app = Flask(__name__)
@@ -25,7 +26,8 @@ def search_email():
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     
-    driver = webdriver.Chrome(options=chrome_options)
+    driver = webdriver.Remote("http://localhost:4444/wd/hub", DesiredCapabilities.CHROME)
+
 
     
     driver.get('https://pplsearch.amfam.com/pplsearch/')
@@ -76,7 +78,7 @@ def search_PID():
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     
-    driver = webdriver.Chrome(options=chrome_options)
+    driver = webdriver.Remote("http://localhost:4444/wd/hub", DesiredCapabilities.CHROME)
 
 
     driver.get('https://pplsearch.amfam.com/pplsearch/')
