@@ -14,12 +14,12 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
     apt-get update && \
     apt-get install -y google-chrome-stable
 
+# Print the Chrome version
+RUN google-chrome-stable --version
+
 # Get the currently installed Chrome version
 RUN CHROME_VERSION=$(google-chrome-stable --version | grep -oE "[0-9]{1,3}(\.[0-9]{1,3}){3}")
 RUN echo $CHROME_VERSION
-
-# Print the Chrome version
-RUN google-chrome-stable --version
 
 # Fetch the latest stable ChromeDriver version for that Chrome
 RUN DRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
