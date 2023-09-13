@@ -19,7 +19,7 @@ def search_email():
     chrome_options.add_argument("--log-level=3")  # Minimize logging
 
     # Initialize the Selenium driver with options
-    driver = webdriver.Chrome(executable_path=r"C:\Users\DRP046\OneDrive - American Family (1)\Desktop\Python Scripts\chromedriver.exe", options=chrome_options)
+    driver = webdriver.Chrome(options=chrome_options)
     
     driver.get('https://pplsearch.amfam.com/pplsearch/')
     WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "optAttribute")))
