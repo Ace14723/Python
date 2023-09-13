@@ -5,10 +5,15 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from flask_cors import CORS
+from flask import Flask, render_template
 import os
 
 app = Flask(__name__)
 CORS(app)
+
+@app.route('/')
+def index():
+    return render_template('Home.html')
 
 @app.route('/search_email', methods=['POST'])
 def search_email():
