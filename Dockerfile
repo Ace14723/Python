@@ -21,9 +21,8 @@ RUN google-chrome-stable --version
 RUN google-chrome-stable --version | grep -oE "[0-9]{1,3}(\.[0-9]{1,3}){3}" > /tmp/chrome_version.txt
 RUN cat /tmp/chrome_version.txt
 
-# Fetch the latest stable ChromeDriver version for that Chrome
-RUN DRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
-RUN echo $DRIVER_VERSION
+# Just echo a known string to check if grep works
+RUN echo "Google Chrome 117.0.5938.62" | grep -oE "[0-9]{1,3}(\.[0-9]{1,3}){3}"
 
 # Download ChromeDriver for that version
 RUN wget "https://chromedriver.storage.googleapis.com/$DRIVER_VERSION/chromedriver_linux64.zip"
