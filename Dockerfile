@@ -1,19 +1,4 @@
-# Use a base image with Python
-FROM python:3.8-buster
-
-# Install necessary packages
-RUN apt-get update && apt-get install -y wget unzip apt-transport-https curl
-
-# Directly download and install Chrome version 93
-RUN curl -O https://www.slimjet.com/chrome/download-chrome.php?file=lnx%2Fchrome64_93.0.4577.63.deb && \
-    dpkg -i download-chrome.php?file=lnx%2Fchrome64_93.0.4577.63.deb || apt-get install -yf
-
-# Install corresponding Chromedriver for Chrome version 93
-RUN wget https://chromedriver.storage.googleapis.com/93.0.4577.63/chromedriver_linux64.zip && \
-    unzip chromedriver_linux64.zip && \
-    mv chromedriver /usr/bin/chromedriver && \
-    chown root:root /usr/bin/chromedriver && \
-    chmod +x /usr/bin/chromedriver
+FROM selenium/standalone-chrome
 
 # Set working directory
 WORKDIR /app
