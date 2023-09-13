@@ -1,20 +1,24 @@
-# Use the official Python image for Windows containers
-FROM python:3.8-windowsservercore
+# Use a base image with Python
+FROM python:3.8-slim-buster
 
-# Download and install Google Chrome
-SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
-RUN Invoke-WebRequest -Uri https://dl.google.com/chrome/install/latest/chrome_installer.exe -OutFile C:\chrome_installer.exe
-RUN Start-Process -FilePath C:\chrome_installer.exe -ArgumentList '/install', '/silent' -Wait
-RUN Remove-Item C:\chrome_installer.exe
-
-# Download and install Chrome WebDriver
-RUN Invoke-WebRequest -Uri https://chromedriver.storage.googleapis.com/LATEST_RELEASE -OutFile C:\chromedriver_version.txt
-RUN $chromeDriverVersion = Get-Content -Path C:\chromedriver_version.txt
-RUN Invoke-WebRequest -Uri "https://chromedriver.storage.googleapis.com/$chromeDriverVersion/chromedriver_win32.zip" -OutFile C:\chromedriver.zip
-RUN Expand-Archive -Path C:\chromedriver.zip -DestinationPath C:\chromedriver
-RUN Remove-Item C:\chromedriver.zip
-RUN Move-Item -Path C:\chromedriver\chromedriver.exe -Destination C:\chromedriver.exe
-RUN Remove-Item -Path C:\chromedriver -Force
+# Install necessary packages and Chrome
+RUN apt-get update && apt-get install -y \
+    wget \
+    curl \
+    gnupg2 \
+    unzip \
+    software-properties-common && \
+    curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+    echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list && \
+    apt-get update && \
+    apt-get install -y google-chrome-stable && \
+    CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d'.' -f1) && \
+    wget https://chromedriver.storage.googleapis.com/${CHROME_VERSION}.0.0/chromedriver_linux64.zip && \
+    unzip chromedriver_linux64.zip && \
+    mv chromedriver /usr/bin/chromedriver && \
+    chown root:root /usr/bin/chromedriver && \
+    chmod +x /usr/bin/chromedriver && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* && rm *.zip
 
 # Set working directory
 WORKDIR /app
