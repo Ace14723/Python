@@ -1,27 +1,27 @@
 # Use a base image with Python
 FROM python:3.8-slim-buster
 
-# Install dependencies for Chrome and ChromeDriver
+# Install dependencies for Microsoft Edge and Microsoft Edge Driver
 RUN apt-get update && apt-get install -y \
     wget \
     gnupg2 \
     unzip \
-    curl
+    curl \
+    software-properties-common
 
-# Install the latest stable version of Chrome
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-    echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list && \
+# Install Microsoft Edge
+RUN curl -msL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
+    add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/debian/10/prod buster main" && \
     apt-get update && \
-    apt-get install -y google-chrome-stable
+    apt-get install -y microsoft-edge-stable
 
-# Get the Chrome version and use it to fetch the matching ChromeDriver
-RUN CHROME_VERSION=$(google-chrome-stable --version | awk '{ print $3 }' | cut -d'.' -f1) && \
-    DRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION") && \
-    wget "https://chromedriver.storage.googleapis.com/$DRIVER_VERSION/chromedriver_linux64.zip" && \
-    unzip chromedriver_linux64.zip && \
-    mv chromedriver /usr/bin/chromedriver && \
-    chown root:root /usr/bin/chromedriver && \
-    chmod +x /usr/bin/chromedriver
+# Fetch the latest stable version of Microsoft Edge Driver
+RUN DRIVER_VERSION=$(curl -s "https://msedgewebdriverstorage.z22.web.core.windows.net/?restype=container&comp=list" | grep -oPm1 "(?<=<Name>edgedriver_)[^<]+" | sort -Vr | head -1) && \
+    wget "https://msedgedriver.azureedge.net/$DRIVER_VERSION/edgedriver_linux64.zip" && \
+    unzip edgedriver_linux64.zip && \
+    mv msedgedriver /usr/bin/msedgedriver && \
+    chown root:root /usr/bin/msedgedriver && \
+    chmod +x /usr/bin/msedgedriver
 
 # Cleanup
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* && rm *.zip
