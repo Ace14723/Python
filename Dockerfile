@@ -15,15 +15,19 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
     apt-get install -y google-chrome-stable
 
 # Get the currently installed Chrome version
-RUN CHROME_VERSION=$(google-chrome-stable --version | grep -oE "[0-9]{1,3}(\.[0-9]{1,3}){3}") && \
-    # Fetch the latest stable ChromeDriver version for that Chrome
-    DRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION") && \
-    # Download ChromeDriver for that version
-    wget "https://chromedriver.storage.googleapis.com/$DRIVER_VERSION/chromedriver_linux64.zip" && \
-    unzip chromedriver_linux64.zip && \
-    mv chromedriver /usr/bin/chromedriver && \
-    chown root:root /usr/bin/chromedriver && \
-    chmod +x /usr/bin/chromedriver
+RUN CHROME_VERSION=$(google-chrome-stable --version | grep -oE "[0-9]{1,3}(\.[0-9]{1,3}){3}")
+RUN echo $CHROME_VERSION
+
+# Fetch the latest stable ChromeDriver version for that Chrome
+RUN DRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+RUN echo $DRIVER_VERSION
+
+# Download ChromeDriver for that version
+RUN wget "https://chromedriver.storage.googleapis.com/$DRIVER_VERSION/chromedriver_linux64.zip"
+RUN unzip chromedriver_linux64.zip
+RUN mv chromedriver /usr/bin/chromedriver
+RUN chown root:root /usr/bin/chromedriver
+RUN chmod +x /usr/bin/chromedriver
 
 # Cleanup
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* && rm *.zip
