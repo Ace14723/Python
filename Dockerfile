@@ -5,19 +5,22 @@ FROM python:3.8-slim-buster
 RUN apt-get update && apt-get install -y \
     wget \
     gnupg2 \
-    unzip
+    unzip \
+    curl
 
 # Install Chrome
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
 RUN echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
 RUN apt-get update && apt-get install -y google-chrome-stable
 
-# Install ChromeDriver (adjust version if needed)
-RUN wget https://chromedriver.storage.googleapis.com/94.0.4606.41/chromedriver_linux64.zip
-RUN unzip chromedriver_linux64.zip
-RUN mv chromedriver /usr/bin/chromedriver
-RUN chown root:root /usr/bin/chromedriver
-RUN chmod +x /usr/bin/chromedriver
+# Install the matching ChromeDriver version
+RUN CHROME_VERSION=$(google-chrome-stable --version | awk '{print $3}' | sed 's/\..*//') && \
+    DRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION") && \
+    wget "https://chromedriver.storage.googleapis.com/$DRIVER_VERSION/chromedriver_linux64.zip" && \
+    unzip chromedriver_linux64.zip && \
+    mv chromedriver /usr/bin/chromedriver && \
+    chown root:root /usr/bin/chromedriver && \
+    chmod +x /usr/bin/chromedriver
 
 # Cleanup
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* && rm *.zip
@@ -37,4 +40,3 @@ EXPOSE 8080
 
 # Command to run the application
 CMD ["gunicorn", "email_search:app", "-b", "0.0.0.0:8080"]
-
