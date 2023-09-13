@@ -1,5 +1,3 @@
-RUN ldd /usr/bin/chromedriver
-
 # Use a base image with Python
 FROM python:3.8-slim-buster
 
@@ -32,6 +30,8 @@ COPY . .
 
 # Expose the port the app runs on
 EXPOSE 8080
+
+RUN ldd /usr/bin/chromedriver
 
 # Command to run the application
 CMD ["gunicorn", "Email_search:app", "-b", "0.0.0.0:8080"]
