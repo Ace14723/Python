@@ -18,7 +18,7 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
     && rm -rf /var/lib/apt/lists/*
 
 # Get the Chrome version and store it in a temporary file
-RUN google-chrome-stable --version | grep -oE "[0-9]{1,3}(\.[0-9]{1,3}){3}" > /tmp/chrome_version.txt
+RUN google-chrome-stable --no-sandbox --headless --version | grep -oE "[0-9]{1,3}(\.[0-9]{1,3}){3}" > /tmp/chrome_version.txt
 
 # Download ChromeDriver for the specific Chrome version and set it up
 RUN CHROME_VERSION=$(cat /tmp/chrome_version.txt) \
