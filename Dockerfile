@@ -1,24 +1,28 @@
 # Use a base image with Python
 FROM python:3.8-slim-buster
 
-# Install necessary packages and Chrome
+# Install dependencies for Chrome and ChromeDriver
 RUN apt-get update && apt-get install -y \
     wget \
-    curl \
     gnupg2 \
     unzip \
-    software-properties-common && \
-    curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-    echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list && \
+    curl
+
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+    echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list && \
     apt-get update && \
-    apt-get install -y google-chrome-stable && \
-    CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d'.' -f1) && \
-    wget https://chromedriver.storage.googleapis.com/${CHROME_VERSION}.0.0/chromedriver_linux64.zip && \
+    apt-get install -y google-chrome-stable
+
+# Install the matching ChromeDriver version
+RUN DRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_96") && \
+    wget "https://chromedriver.storage.googleapis.com/$DRIVER_VERSION/chromedriver_linux64.zip" && \
     unzip chromedriver_linux64.zip && \
     mv chromedriver /usr/bin/chromedriver && \
     chown root:root /usr/bin/chromedriver && \
-    chmod +x /usr/bin/chromedriver && \
-    apt-get clean && rm -rf /var/lib/apt/lists/* && rm *.zip
+    chmod +x /usr/bin/chromedriver
+
+# Cleanup
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* && rm *.zip
 
 # Set working directory
 WORKDIR /app
