@@ -1,30 +1,14 @@
 # Use a base image with Python
 FROM python:3.8-slim-buster
 
-# Install dependencies for Microsoft Edge and Microsoft Edge Driver
+# Install necessary packages
 RUN apt-get update && apt-get install -y \
     wget \
+    curl \
     gnupg2 \
     unzip \
-    curl \
-    software-properties-common
-
-# Install Microsoft Edge
-RUN curl -sL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
-    add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/debian/10/prod buster main" && \
-    apt-get update && \
-    apt-get install -y microsoft-edge-stable
-
-# Fetch the latest stable version of Microsoft Edge Driver
-RUN DRIVER_VERSION=$(curl -s "https://msedgewebdriverstorage.z22.web.core.windows.net/?restype=container&comp=list" | grep -oPm1 "(?<=<Name>edgedriver_)[^<]+" | sort -Vr | head -1) && \
-    wget "https://msedgedriver.azureedge.net/$DRIVER_VERSION/edgedriver_linux64.zip" && \
-    unzip edgedriver_linux64.zip && \
-    mv msedgedriver /usr/bin/msedgedriver && \
-    chown root:root /usr/bin/msedgedriver && \
-    chmod +x /usr/bin/msedgedriver
-
-# Cleanup
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* && rm *.zip
+    software-properties-common && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
