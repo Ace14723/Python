@@ -2,8 +2,9 @@
 FROM python:3.8-windowsservercore
 
 # Download and install Google Chrome
+SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 RUN Invoke-WebRequest -Uri https://dl.google.com/chrome/install/latest/chrome_installer.exe -OutFile C:\chrome_installer.exe
-RUN Start-Process -FilePath C:\chrome_installer.exe -ArgumentList "/install", "/silent" -Wait
+RUN Start-Process -FilePath C:\chrome_installer.exe -ArgumentList '/install', '/silent' -Wait
 RUN Remove-Item C:\chrome_installer.exe
 
 # Download and install Chrome WebDriver
