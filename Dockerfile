@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     software-properties-common
 
 # Install Microsoft Edge
-RUN curl -msL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
+RUN curl -sL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
     add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/debian/10/prod buster main" && \
     apt-get update && \
     apt-get install -y microsoft-edge-stable
