@@ -2,14 +2,11 @@
 FROM python:3.8-slim-buster
 
 # Install necessary packages
-RUN apt-get update && apt-get install -y wget unzip apt-transport-https software-properties-common
+RUN apt-get update && apt-get install -y wget unzip apt-transport-https curl
 
-# Add Google Chrome to the sources
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - 
-RUN echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | tee /etc/apt/sources.list.d/google-chrome.list
-
-# Install specific version of Chrome
-RUN apt-get update && apt-get install -y google-chrome-stable=93.0.4577.63-1
+# Directly download and install Chrome version 93 (URL might need updating based on availability)
+RUN curl -O https://www.slimjet.com/chrome/download-chrome.php?file=lnx%2Fchrome64_93.0.4577.63.deb
+RUN dpkg -i download-chrome.php?file=lnx%2Fchrome64_93.0.4577.63.deb || apt-get install -yf
 
 # Install corresponding Chromedriver for Chrome version 93
 RUN wget https://chromedriver.storage.googleapis.com/93.0.4577.63/chromedriver_linux64.zip
