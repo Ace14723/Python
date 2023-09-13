@@ -1,14 +1,27 @@
 # Use a base image with Python
 FROM python:3.8-slim-buster
 
-# Install necessary packages
+# Install necessary packages and Chrome
 RUN apt-get update && apt-get install -y \
     wget \
     curl \
     gnupg2 \
     unzip \
     software-properties-common && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+    curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+    echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list && \
+    apt-get update && \
+    apt-get install -y google-chrome-stable && \
+    CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d'.' -f1) && \
+    
+    # Adjusted to download Windows version of ChromeDriver
+    wget https://chromedriver.storage.googleapis.com/${CHROME_VERSION}.0.0/chromedriver_win32.zip && \
+    unzip chromedriver_win32.zip && \
+    mv chromedriver.exe /usr/bin/chromedriver && \  # Renamed to chromedriver.exe
+    chown root:root /usr/bin/chromedriver && \
+    chmod +x /usr/bin/chromedriver && \
+    
+    apt-get clean && rm -rf /var/lib/apt/lists/* && rm *.zip
 
 # Set working directory
 WORKDIR /app
