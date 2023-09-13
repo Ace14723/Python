@@ -6,7 +6,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from flask_cors import CORS
 from flask import Flask, render_template
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import os
 
 app = Flask(__name__)
@@ -20,12 +19,15 @@ def index():
 def search_email():
     email = request.json['email']
     
-    # Use Remote WebDriver to connect to the Selenium standalone container
-    driver = webdriver.Remote(
-        command_executor="http://localhost:4444/wd/hub",
-        desired_capabilities=DesiredCapabilities.CHROME
-    )
+    # Set up Chrome options
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    
+    driver = webdriver.Chrome(options=chrome_options)
 
+    
     driver.get('https://pplsearch.amfam.com/pplsearch/')
     WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "optAttribute")))
 
@@ -69,11 +71,12 @@ def search_PID():
 
     producerID = request.json['producerID']
 
-    # Use Remote WebDriver to connect to the Selenium standalone container
-    driver = webdriver.Remote(
-        command_executor="http://localhost:4444/wd/hub",
-        desired_capabilities=DesiredCapabilities.CHROME
-    )
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    
+    driver = webdriver.Chrome(options=chrome_options)
 
 
     driver.get('https://pplsearch.amfam.com/pplsearch/')
@@ -116,4 +119,3 @@ def search_PID():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
-
