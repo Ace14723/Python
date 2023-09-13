@@ -18,13 +18,15 @@ def index():
 @app.route('/search_email', methods=['POST'])
 def search_email():
     email = request.json['email']
+    
     # Set up Chrome options
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")  # Enable headless mode
-    chrome_options.add_argument("--log-level=3")  # Minimize logging
-
-    # Initialize the Selenium driver with options
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    
     driver = webdriver.Chrome(options=chrome_options)
+
     
     driver.get('https://pplsearch.amfam.com/pplsearch/')
     WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "optAttribute")))
@@ -69,13 +71,13 @@ def search_PID():
 
     producerID = request.json['producerID']
 
-    # Set up Chrome options
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")  # Enable headless mode
-    chrome_options.add_argument("--log-level=3")  # Minimize logging
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    
+    driver = webdriver.Chrome(options=chrome_options)
 
-    # Initialize the Selenium driver with options
-    driver = webdriver.Chrome(executable_path=r"C:\Users\DRP046\OneDrive - American Family (1)\Desktop\Python Scripts\chromedriver.exe", options=chrome_options)
 
     driver.get('https://pplsearch.amfam.com/pplsearch/')
     WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "optAttribute")))
