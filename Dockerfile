@@ -1,4 +1,4 @@
-# Use the official Python image for Windows
+# Use the official Python image for Windows containers
 FROM python:3.8-windowsservercore
 
 # Download and install Google Chrome
