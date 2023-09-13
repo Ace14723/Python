@@ -36,4 +36,5 @@ COPY . .
 EXPOSE 8080
 
 # Command to run the application
-CMD ["gunicorn", "app:app", "-b", "0.0.0.0:8080"]
+CMD ["gunicorn", "email_search:app", "-b", "0.0.0.0:8080"]
+
