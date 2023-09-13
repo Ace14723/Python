@@ -1,20 +1,26 @@
 # Use a base image with Python
 FROM python:3.8-slim-buster
 
-# Install Chrome
-RUN apt-get update && apt-get install -y wget unzip
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-RUN apt install -y ./google-chrome-stable_current_amd64.deb
+# Install dependencies for Chrome and ChromeDriver
+RUN apt-get update && apt-get install -y \
+    wget \
+    gnupg2 \
+    unzip
 
-# Install ChromeDriver
-RUN wget https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip
+# Install Chrome
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+RUN echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
+RUN apt-get update && apt-get install -y google-chrome-stable
+
+# Install ChromeDriver (adjust version if needed)
+RUN wget https://chromedriver.storage.googleapis.com/94.0.4606.41/chromedriver_linux64.zip
 RUN unzip chromedriver_linux64.zip
 RUN mv chromedriver /usr/bin/chromedriver
 RUN chown root:root /usr/bin/chromedriver
 RUN chmod +x /usr/bin/chromedriver
 
-# Set the display port to avoid crash
-ENV DISPLAY=:99
+# Cleanup
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* && rm *.zip
 
 # Set working directory
 WORKDIR /app
