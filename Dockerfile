@@ -17,17 +17,18 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Get the Chrome version and store it in a temporary file
-RUN dpkg -l | grep google-chrome-stable | awk '{print $3}' > /tmp/chrome_version.txt
-
-# Download ChromeDriver for the specific Chrome version and set it up
-RUN CHROME_VERSION=$(cat /tmp/chrome_version.txt) \
-    && wget "https://chromedriver.storage.googleapis.com/$CHROME_VERSION/chromedriver_linux64.zip" \
+# Extract the major version of Chrome
+RUN MAJOR_VERSION=$(cat /tmp/chrome_version.txt | cut -d'.' -f1) \
+    && echo "Major version of Chrome: $MAJOR_VERSION" \
+    && CHROME_DRIVER_VERSION=$(wget -qO- https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$MAJOR_VERSION) \
+    && echo "Downloading ChromeDriver version: $CHROME_DRIVER_VERSION" \
+    && wget "https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip" \
     && unzip chromedriver_linux64.zip \
     && mv chromedriver /usr/bin/chromedriver \
     && chown root:root /usr/bin/chromedriver \
     && chmod +x /usr/bin/chromedriver \
     && rm chromedriver_linux64.zip
+
 
 # Set working directory
 WORKDIR /app
