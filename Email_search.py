@@ -19,13 +19,10 @@ def index():
 def search_email():
     email = request.json['email']
     
-    # Set up Chrome options
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    
-    driver = webdriver.Chrome(options=chrome_options)
+    #setup Edge as the designated browser
+    options = webdriver.EdgeOptions()
+    options.use_chromium = True
+    driver = webdriver.Edge(options=options)
 
     
     driver.get('https://pplsearch.amfam.com/pplsearch/')
@@ -71,12 +68,10 @@ def search_PID():
 
     producerID = request.json['producerID']
 
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    
-    driver = webdriver.Chrome(options=chrome_options)
+    #setup Edge as the designated browser
+    options = webdriver.EdgeOptions()
+    options.use_chromium = True
+    driver = webdriver.Edge(options=options)
 
 
     driver.get('https://pplsearch.amfam.com/pplsearch/')
