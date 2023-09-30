@@ -29,8 +29,8 @@ def search_email():
 
     chrome_options = Options()
     # Add any desired options to chrome_options here, e.g.
-    chrome_options.binary_location = os.environ.get("CHROME_BIN", "/usr/bin/google-chrome-stable")
     chrome_options.add_argument("--headless")
+    chrome_options.binary_location = CHROME_BIN
     driver = webdriver.Remote(command_executor="http://127.0.0.1:4444/wd/hub", options=chrome_options)
     
     driver.get('https://pplsearch.amfam.com/pplsearch/')
@@ -78,7 +78,7 @@ def search_PID():
 
     chrome_options = Options()
     # Add any desired options to chrome_options here, e.g.
-    chrome_options.binary_location = os.environ.get("CHROME_BIN", "/usr/bin/google-chrome-stable")
+    chrome_options.binary_location = CHROME_BIN
     chrome_options.add_argument("--headless")
     driver = webdriver.Remote(command_executor="http://localhost:4444/wd/hub", options=chrome_options)
 
@@ -126,4 +126,5 @@ def health_check():
     return jsonify(status="healthy"), 200
 
 if __name__ == '__main__':
+    print(f"Using CHROME_BIN at: {CHROME_BIN}")
     app.run(host=HOST, port=PORT)
