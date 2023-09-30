@@ -11,6 +11,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 
 import os
+import subprocess
 
 PORT = os.environ.get('PORT', 5000)
 HOST = os.environ.get('HOST', '0.0.0.0')
@@ -26,6 +27,9 @@ def index():
 @app.route('/search_email', methods=['POST'])
 def search_email():
     email = request.json['email']
+
+    chrome_path = subprocess.check_output(["which", "google-chrome-stable"]).decode("utf-8").strip()
+    print(f"Chrome binary is located at: {chrome_path}")
 
     chrome_options = Options()
     # Add any desired options to chrome_options here, e.g.
