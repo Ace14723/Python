@@ -46,4 +46,4 @@ ENV CHROME_BIN=/usr/bin/google-chrome-stable
 EXPOSE 4444
 
 # Define the command to run the app using CMD
-CMD ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port=5000"]
+CMD ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port=4444"]
