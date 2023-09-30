@@ -1,20 +1,35 @@
-# Use the selenium base image with standalone chrome
-FROM selenium/standalone-chrome
-# Set the working directory
+# Use an official Selenium Python image as the base image
+FROM selenium/standalone-chrome:latest
+# Set the maintainer label
+LABEL maintainer="dpatters@amfam.com"
+# Set the working directory in the container
 WORKDIR /usr/app
-# Copy the current directory contents into the container
-COPY . /usr/app
-#additional copy line
-COPY ./startup.sh /usr/app/startup.sh
-# Switch to root user to change permissions
-USER root
-# Ensure the startup script is executable
-RUN chmod +x /usr/app/startup.sh
+# Copy the current directory contents into the container at /usr/app
+COPY . .
 # Install system dependencies
+USER root
 RUN apt-get update && apt-get install -y python3 python3-pip
-# Switch back to selenium user for other operations
-USER seluser
 # Install Python libraries
+COPY requirements.txt requirements.txt
 RUN pip3 install --no-cache-dir -r requirements.txt
-# Use the custom startup script as the default command
-CMD ["/usr/app/startup.sh"]
+# Switch back to the default user
+USER seluser
+# Set Flask-specific environment variables
+ENV FLASK_APP=Email_search.py
+ENV FLASK_RUN_HOST=0.0.0.0
+# Expose port
+EXPOSE 5000
+# Define the command to run the app using CMD
+CMD /opt/bin/start-xvfb.sh && /opt/bin/start-selenium-standalone.sh && sleep 5 && python3 ./Email_search.py
+
+
+
+
+
+
+
+
+
+
+
+
