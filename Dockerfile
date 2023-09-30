@@ -4,12 +4,10 @@ FROM selenium/standalone-chrome
 WORKDIR /usr/src/app
 # Copy the current directory contents into the container at /usr/src/app
 COPY . .
+# Fix apt-get directories and update
+RUN mkdir -p /var/lib/apt/lists/partial && apt-get clean && apt-get update
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
-    python3 \
-    python3-pip \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/*
+RUN apt-get install -y python3 python3-pip
 # Set Python 3 as the default
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1
 RUN update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
