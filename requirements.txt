@@ -1,3 +1,4 @@
 flask==2.0.1
 selenium==4.1.0
 Flask-Cors
+werkzeug==0.16.1
