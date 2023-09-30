@@ -10,11 +10,11 @@ USER root
 RUN mkdir -p /var/lib/apt/lists/partial && apt-get clean && apt-get update
 # Install system dependencies
 RUN apt-get install -y python3 python3-pip
-# Switch back to the default user
-USER seluser
 # Set Python 3 as the default
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1
 RUN update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
+# Switch back to the default user
+USER seluser
 # Install Python libraries
 RUN pip install --no-cache-dir Flask-Cors
 RUN pip install --no-cache-dir -r requirements.txt
