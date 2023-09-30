@@ -18,7 +18,7 @@ USER seluser
 ENV FLASK_APP=Email_search.py
 ENV FLASK_RUN_HOST=0.0.0.0
 # Expose port
-EXPOSE 5000
+EXPOSE 8080
 # Define the command to run the app using CMD
 CMD /opt/bin/start-xvfb.sh && /opt/bin/start-selenium-standalone.sh && sleep 5 && python3 ./Email_search.py
 
