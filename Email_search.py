@@ -7,7 +7,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from flask_cors import CORS
 from flask import Flask, render_template
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-import os
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 
 import os
 
@@ -25,17 +26,11 @@ def index():
 @app.route('/search_email', methods=['POST'])
 def search_email():
     email = request.json['email']
-    
-    # Set up Chrome options
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.binary_location = CHROME_BIN
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    
-    driver = webdriver.Remote("http://localhost:4444/wd/hub", DesiredCapabilities.CHROME)
 
-
+    chrome_options = Options()
+    # Add any desired options to chrome_options here, e.g.
+    # chrome_options.add_argument("--headless")
+    driver = webdriver.Remote(command_executor="http://localhost:4444/wd/hub", options=chrome_options)
     
     driver.get('https://pplsearch.amfam.com/pplsearch/')
     WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "optAttribute")))
@@ -80,13 +75,10 @@ def search_PID():
 
     producerID = request.json['producerID']
 
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.binary_location = CHROME_BIN
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    
-    driver = webdriver.Remote("http://localhost:4444/wd/hub", DesiredCapabilities.CHROME)
+    chrome_options = Options()
+    # Add any desired options to chrome_options here, e.g.
+    # chrome_options.add_argument("--headless")
+    driver = webdriver.Remote(command_executor="http://localhost:4444/wd/hub", options=chrome_options)
 
 
     driver.get('https://pplsearch.amfam.com/pplsearch/')
