@@ -29,7 +29,7 @@ def search_email():
 
     chrome_options = Options()
     # Add any desired options to chrome_options here, e.g.
-    # chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--headless")
     driver = webdriver.Remote(command_executor="http://localhost:4444/wd/hub", options=chrome_options)
     
     driver.get('https://pplsearch.amfam.com/pplsearch/')
@@ -77,7 +77,7 @@ def search_PID():
 
     chrome_options = Options()
     # Add any desired options to chrome_options here, e.g.
-    # chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--headless")
     driver = webdriver.Remote(command_executor="http://localhost:4444/wd/hub", options=chrome_options)
 
 
