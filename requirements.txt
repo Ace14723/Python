@@ -1,4 +1,4 @@
-flask==2.0.1
+flask==2.0.0
 selenium==4.1.0
 Flask-Cors
-werkzeug==0.16.1
+werkzeug==
