@@ -11,7 +11,7 @@ WORKDIR /usr/app
 RUN apt-get update && apt-get upgrade -y
 
 # Install essential tools
-RUN apt-get install -y wget unzip curl
+RUN apt-get install -y wget unzip curl default-jdk
 
 # Install Chrome
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
@@ -24,6 +24,9 @@ RUN unzip chromedriver_linux64.zip
 RUN mv chromedriver /usr/local/bin/
 RUN chmod +x /usr/local/bin/chromedriver
 RUN rm chromedriver_linux64.zip
+
+# Install Selenium Standalone Server
+RUN wget https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar -O selenium-server-standalone.jar
 
 # Clean up
 RUN apt-get purge --auto-remove -y curl unzip wget
@@ -39,11 +42,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Set Flask-specific environment variables
 ENV FLASK_APP=Email_search.py
 ENV FLASK_RUN_HOST=0.0.0.0
-ENV FLASK_RUN_PORT=4444
+ENV FLASK_RUN_PORT=5000
 ENV CHROME_BIN=/usr/bin/google-chrome-stable
 
-# Expose port
-EXPOSE 4444
+# Expose ports
+EXPOSE 5000 4444
 
-# Define the command to run the app using CMD
-CMD ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port=4444"]
+# Define the command to start both the Selenium server and Flask app
+CMD java -jar selenium-server-standalone.jar & sleep 5 && python -m flask run --host=0.0.0.0 --port=5000
