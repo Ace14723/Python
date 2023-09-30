@@ -46,7 +46,7 @@ ENV FLASK_RUN_PORT=5000
 ENV CHROME_BIN=/usr/bin/google-chrome-stable
 
 # Expose ports
-EXPOSE 5000 4444
+EXPOSE 5000
 
 # Define the command to start both the Selenium server and Flask app
 CMD java -jar selenium-server-standalone.jar & sleep 5 && python -m flask run --host=0.0.0.0 --port=5000
