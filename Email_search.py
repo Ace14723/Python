@@ -12,7 +12,7 @@ from selenium.webdriver.chrome.options import Options
 
 import os
 
-PORT = os.environ.get('PORT', 8080)
+PORT = os.environ.get('PORT', 5000)
 HOST = os.environ.get('HOST', '0.0.0.0')
 CHROME_BIN = os.environ.get('CHROME_BIN', '/usr/bin/google-chrome-stable')
 
