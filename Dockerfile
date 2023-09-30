@@ -44,6 +44,7 @@ ENV FLASK_APP=Email_search.py
 ENV FLASK_RUN_HOST=0.0.0.0
 ENV FLASK_RUN_PORT=5000
 ENV CHROME_BIN=/usr/bin/google-chrome-stable
+ENV CHROMEDRIVER_PATH=/usr/local/bin/chromedriver
 
 # Expose ports
 EXPOSE 5000
