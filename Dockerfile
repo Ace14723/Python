@@ -3,7 +3,7 @@ FROM selenium/standalone-chrome
 # Set the working directory
 WORKDIR /usr/app
 # Copy the current directory contents into the container
-COPY /usr/app
+COPY . /usr/app
 #additional copy line
 COPY ./startup.sh /usr/app/startup.sh
 # Switch to root user to change permissions
