@@ -30,7 +30,7 @@ def search_email():
     chrome_options = Options()
     # Add any desired options to chrome_options here, e.g.
     chrome_options.add_argument("--headless")
-    driver = webdriver.Remote(command_executor="http://localhost:4444/wd/hub", options=chrome_options)
+    driver = webdriver.Remote(command_executor="http://127.0.0.1:4444/wd/hub", options=chrome_options)
     
     driver.get('https://pplsearch.amfam.com/pplsearch/')
     WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "optAttribute")))
