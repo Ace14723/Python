@@ -1,10 +1,12 @@
 FROM selenium/standalone-chrome
 # Set working directory
 WORKDIR /app
-# Change permissions for the apt directories
-RUN chmod 777 /var/lib/apt/lists /var/cache/apt/archives /var/lib/apt/lists/partial
+# Run the following commands as root
+USER root
 # Install pip
 RUN apt-get update && apt-get install -y python3-pip
+# Switch back to the default user (this might be 'selenium' or another user, depending on the image)
+# USER selenium
 # Copy the requirements.txt and install the Python dependencies
 COPY requirements.txt requirements.txt
 RUN pip3 install --no-cache-dir -r requirements.txt
