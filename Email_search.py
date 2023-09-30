@@ -9,6 +9,12 @@ from flask import Flask, render_template
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import os
 
+import os
+
+PORT = os.environ.get('PORT', 8080)
+HOST = os.environ.get('HOST', '0.0.0.0')
+CHROME_BIN = os.environ.get('CHROME_BIN', '/usr/bin/google-chrome-stable')
+
 app = Flask(__name__)
 CORS(app)
 
@@ -22,6 +28,7 @@ def search_email():
     
     # Set up Chrome options
     chrome_options = webdriver.ChromeOptions()
+    chrome_options.binary_location = CHROME_BIN
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
@@ -74,6 +81,7 @@ def search_PID():
     producerID = request.json['producerID']
 
     chrome_options = webdriver.ChromeOptions()
+    chrome_options.binary_location = CHROME_BIN
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
@@ -120,4 +128,4 @@ def search_PID():
     return jsonify({"url": current_url})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
+    app.run(host=HOST, port=PORT)
